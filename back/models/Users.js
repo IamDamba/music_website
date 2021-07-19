@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const isEmail = require("validator");
+const { isEmail } = require("validator");
 const bcrypt = require("bcrypt");
 
 const UserSchema = new mongoose.Schema({
@@ -15,6 +15,11 @@ const UserSchema = new mongoose.Schema({
     require: [true, "Please enter an password."],
     minlength: [6, "Minimum password length is 6 characters"],
   },
+  username: {
+    type: String,
+    unique: true,
+    minlength: [3, "Minimum password length is 3 characters"],
+  },
 });
 
 UserSchema.pre("save", async function (next) {
@@ -23,7 +28,7 @@ UserSchema.pre("save", async function (next) {
   next();
 });
 
-UserSchema.statics.login = async function (email, password) {
+UserSchema.statics.signin = async function (email, password) {
   const user = await this.findOne({ email });
 
   if (user) {
@@ -36,6 +41,6 @@ UserSchema.statics.login = async function (email, password) {
   throw Error("Incorrect Email");
 };
 
-const User = mongoose.model("user", userSchema);
+const User = mongoose.model("user", UserSchema);
 
 module.exports = User;

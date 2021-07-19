@@ -6,7 +6,7 @@ module.exports = (model) => {
     let endIndex = page * limit;
     let result = {};
 
-    if (endIndex < (await model.countDocument().exec())) {
+    if (endIndex < (await model.countDocuments().exec())) {
       result.next = {
         page: page + 1,
         limit: limit,
@@ -20,7 +20,7 @@ module.exports = (model) => {
       };
     }
 
-    result.count = (await model.countDocument().exec()) / limit;
+    result.count = (await model.countDocuments().exec()) / limit;
 
     try {
       result.results = await model.find().limit(limit).skip(startIndex).exec();
@@ -31,3 +31,4 @@ module.exports = (model) => {
     }
   };
 };
+  
